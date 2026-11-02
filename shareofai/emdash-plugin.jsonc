@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/@emdash-cms/plugin-cli/schemas/emdash-plugin.schema.json",
+  "slug": "shareofai",
+  "publisher": "did:plc:oupdvzdotnqcrb224bl7ljhx",
+  "license": "MIT",
+  "author": {
+    "name": "ShareofAI",
+    "url": "https://www.shareof.ai"
+  },
+  "security": {
+    "email": "hello@shareof.ai"
+  },
+  "name": "ShareofAI Content Readiness",
+  "description": "Review content structure, sources, and buyer questions locally. Open ShareofAI for measured AI visibility.",
+  "keywords": [
+    "ai-visibility",
+    "content",
+    "seo",
+    "geo"
+  ],
+  "capabilities": [
+    "content:read"
+  ],
+  "allowedHosts": [],
+  "storage": {},
+  "admin": {
+    "pages": [
+      {
+        "path": "/readiness",
+        "label": "ShareofAI",
+        "icon": "chart-bar"
+      }
+    ],
+    "editorPanels": [
+      {
+        "id": "readiness",
+        "title": "ShareofAI Content Readiness",
+        "route": "panel"
+      }
+    ]
+  },
+  "release": {
+    "artifacts": {
+      "icon": {
+        "file": "./icon.png"
+      }
+    }
+  }
+}

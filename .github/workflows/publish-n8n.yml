@@ -1,0 +1,26 @@
+name: Publish n8n package
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: n8n-nodes-shareofai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      # Owner must configure npm trusted publishing for this exact repository and workflow.
+      # First publication may need an owner-controlled bootstrap publish before OIDC setup.
+      - run: npm publish --provenance --access public

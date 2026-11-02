@@ -1,0 +1,602 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ShareofAI MCP API",
+    "version": "1.0.0",
+    "description": "Read-only AI-answer visibility, competitors, citations, tracked prompts and recommended actions from your ShareofAI workspace. This is a JSON-RPC MCP API, not a REST API. Each user must authorize their own ShareofAI account through OAuth2 Dynamic Client Registration and S256 PKCE. A RapidAPI key does not replace the upstream ShareofAI bearer token. A JSON-RPC/tool error can have HTTP 200: inspect error and result.isError. Empty arrays and null fields mean unavailable evidence, not zero or a failure. Documentation: https://www.shareof.ai/docs/mcp",
+    "termsOfService": "https://www.shareof.ai/terms",
+    "contact": {
+      "name": "ShareofAI",
+      "url": "https://www.shareof.ai",
+      "email": "hello@shareof.ai"
+    },
+    "license": {
+      "name": "ShareofAI Terms of Service",
+      "url": "https://www.shareof.ai/terms"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.shareof.ai"
+    }
+  ],
+  "security": [
+    {
+      "ShareofAIBearer": []
+    }
+  ],
+  "paths": {
+    "/mcp": {
+      "post": {
+        "operationId": "shareofaiMcp",
+        "summary": "Call the ShareofAI MCP server",
+        "description": "Initialize the MCP connection, discover tools, or call one of the six read-only tools. Replace example project IDs with IDs from list_projects. Never publish tokens in request examples. Use the canonical www URL to avoid redirects.",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "default": "application/json, text/event-stream"
+            }
+          },
+          {
+            "name": "MCP-Protocol-Version",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "default": "2025-06-18"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "jsonrpc",
+                      "id",
+                      "method",
+                      "params"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "jsonrpc": {
+                        "type": "string",
+                        "enum": [
+                          "2.0"
+                        ]
+                      },
+                      "id": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "tools/call"
+                        ]
+                      },
+                      "params": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "list_projects"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {},
+                                "required": []
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "get_visibility_overview"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "project_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "description": "An accessible project ID returned by list_projects."
+                                  },
+                                  "days": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 365,
+                                    "default": 30
+                                  }
+                                },
+                                "required": [
+                                  "project_id"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "compare_competitors"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "project_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "description": "An accessible project ID returned by list_projects."
+                                  },
+                                  "days": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 365,
+                                    "default": 30
+                                  }
+                                },
+                                "required": [
+                                  "project_id"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "get_cited_sources"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "project_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "description": "An accessible project ID returned by list_projects."
+                                  },
+                                  "days": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 365,
+                                    "default": 30
+                                  },
+                                  "limit": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 50,
+                                    "default": 15
+                                  }
+                                },
+                                "required": [
+                                  "project_id"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "get_prompt_performance"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "project_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "description": "An accessible project ID returned by list_projects."
+                                  },
+                                  "days": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 365,
+                                    "default": 30
+                                  },
+                                  "limit": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 50,
+                                    "default": 20
+                                  }
+                                },
+                                "required": [
+                                  "project_id"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "name",
+                              "arguments"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "enum": [
+                                  "get_recommended_actions"
+                                ]
+                              },
+                              "arguments": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "project_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "description": "An accessible project ID returned by list_projects."
+                                  },
+                                  "limit": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30,
+                                    "default": 10
+                                  }
+                                },
+                                "required": [
+                                  "project_id"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "jsonrpc",
+                      "id",
+                      "method",
+                      "params"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "jsonrpc": {
+                        "type": "string",
+                        "enum": [
+                          "2.0"
+                        ]
+                      },
+                      "id": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "initialize"
+                        ]
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "protocolVersion",
+                          "capabilities",
+                          "clientInfo"
+                        ],
+                        "properties": {
+                          "protocolVersion": {
+                            "type": "string",
+                            "enum": [
+                              "2025-06-18"
+                            ]
+                          },
+                          "capabilities": {
+                            "type": "object"
+                          },
+                          "clientInfo": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "version"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "jsonrpc",
+                      "id",
+                      "method"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "jsonrpc": {
+                        "type": "string",
+                        "enum": [
+                          "2.0"
+                        ]
+                      },
+                      "id": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "tools/list",
+                          "ping"
+                        ]
+                      },
+                      "params": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                ]
+              },
+              "examples": {
+                "list_projects": {
+                  "summary": "List projects",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "list_projects",
+                      "arguments": {}
+                    }
+                  }
+                },
+                "get_visibility_overview": {
+                  "summary": "Get visibility overview",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_visibility_overview",
+                      "arguments": {
+                        "project_id": "00000000-0000-4000-8000-000000000001",
+                        "days": 30
+                      }
+                    }
+                  }
+                },
+                "compare_competitors": {
+                  "summary": "Compare competitors",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "compare_competitors",
+                      "arguments": {
+                        "project_id": "00000000-0000-4000-8000-000000000001",
+                        "days": 30
+                      }
+                    }
+                  }
+                },
+                "get_cited_sources": {
+                  "summary": "Get cited sources",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_cited_sources",
+                      "arguments": {
+                        "project_id": "00000000-0000-4000-8000-000000000001",
+                        "days": 30,
+                        "limit": 15
+                      }
+                    }
+                  }
+                },
+                "get_prompt_performance": {
+                  "summary": "Get prompt performance",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_prompt_performance",
+                      "arguments": {
+                        "project_id": "00000000-0000-4000-8000-000000000001",
+                        "days": 30,
+                        "limit": 20
+                      }
+                    }
+                  }
+                },
+                "get_recommended_actions": {
+                  "summary": "Get recommended actions",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_recommended_actions",
+                      "arguments": {
+                        "project_id": "00000000-0000-4000-8000-000000000001",
+                        "limit": 10
+                      }
+                    }
+                  }
+                },
+                "initialize": {
+                  "summary": "Initialize MCP before tool calls",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                      "protocolVersion": "2025-06-18",
+                      "capabilities": {},
+                      "clientInfo": {
+                        "name": "rapidapi-client",
+                        "version": "1.0.0"
+                      }
+                    }
+                  }
+                },
+                "tools_list": {
+                  "summary": "Discover tools",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/list",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response; inspect error and result.isError before treating as success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jsonrpc": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "result": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired, invalid, or revoked ShareofAI OAuth bearer token. Refresh or reauthorize the user."
+          },
+          "403": {
+            "description": "Request origin or resource is not allowed."
+          },
+          "400": {
+            "description": "Invalid request or JSON."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ShareofAIBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "OAuth2 access token",
+        "description": "User-scoped ShareofAI access token for resource https://www.shareof.ai/mcp. Obtain through the documented DCR and PKCE flow; refresh expires separately. Never use a shared reviewer token."
+      }
+    }
+  }
+}

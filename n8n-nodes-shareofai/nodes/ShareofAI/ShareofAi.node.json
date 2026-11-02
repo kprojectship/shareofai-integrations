@@ -1,0 +1,15 @@
+{
+  "node": "n8n-nodes-shareofai.shareofAi",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Analytics"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://www.shareof.ai/docs/mcp"
+      }
+    ]
+  }
+}

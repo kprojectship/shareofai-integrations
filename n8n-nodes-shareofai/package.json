@@ -1,0 +1,54 @@
+{
+  "name": "n8n-nodes-shareofai",
+  "version": "0.1.0",
+  "description": "Read ShareofAI AI visibility, competitor, citation, prompt and recommended-action data in n8n.",
+  "license": "MIT",
+  "homepage": "https://www.shareof.ai/docs/mcp",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": {
+    "name": "ShareofAI",
+    "email": "hello@shareof.ai",
+    "url": "https://www.shareof.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kprojectship/shareofai-integrations.git",
+    "directory": "n8n-nodes-shareofai"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease",
+    "test": "npm run build && node --test tests/*.test.cjs"
+  },
+  "files": [
+    "dist",
+    "workflows"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/ShareofAiOAuth2Api.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/ShareofAI/ShareofAi.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.54.6",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^21.1.0",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

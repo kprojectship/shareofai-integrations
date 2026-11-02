@@ -1,0 +1,11 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {rpcResult,toolArguments}=require('../dist/nodes/ShareofAI/rpc');
+const project='00000000-0000-4000-8000-000000000001';
+test('unknown data stays null',()=>assert.deepEqual(rpcResult({result:{structuredContent:{average_position:null,actions:[]}}}),{average_position:null,actions:[]}));
+test('MCP tool failures become workflow failures',()=>assert.throws(()=>rpcResult({result:{isError:true,content:[{type:'text',text:'Project not found'}]}}),/Project not found/));
+test('RPC failures become workflow failures',()=>assert.throws(()=>rpcResult({error:{message:'Unauthorized'}}),/Unauthorized/));
+test('invalid response is rejected',()=>assert.throws(()=>rpcResult({}),/no result/));
+test('project discovery has no project or date dependency',()=>assert.deepEqual(toolArguments('list_projects','',0,0),{}));
+test('recommended actions have no unsupported date parameter',()=>assert.deepEqual(toolArguments('get_recommended_actions',project,365,10),{project_id:project,limit:10}));
+test('invalid project and unsupported bounds are rejected',()=>{assert.throws(()=>toolArguments('get_visibility_overview','wrong',30,10));assert.throws(()=>toolArguments('get_prompt_performance',project,366,10));assert.throws(()=>toolArguments('get_recommended_actions',project,30,31));});

@@ -1,0 +1,159 @@
+{
+  "name": "Review AI visibility and competitors with ShareofAI",
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Run review",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "projects",
+      "name": "List ShareofAI projects",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        0
+      ],
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://www.shareof.ai/mcp",
+        "authentication": "mcpOAuth2Api",
+        "tool": {
+          "mode": "id",
+          "value": "list_projects"
+        },
+        "inputMode": "json",
+        "jsonInput": "{}",
+        "options": {}
+      }
+    },
+    {
+      "id": "note",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -280
+      ],
+      "parameters": {
+        "content": "## ShareofAI visibility review\nCreate MCP OAuth2 credentials with automatic registration. Set server/resource URL to https://www.shareof.ai/mcp, then select these credentials on all MCP nodes.\n\nThis template reviews your most recently updated accessible project. To choose another project, edit the project_id expression in the three review nodes. If you have no projects, create one in ShareofAI first.\n\nRead-only: no scans or project edits. Docs: https://www.shareof.ai/docs/mcp",
+        "height": 240,
+        "width": 620
+      }
+    },
+    {
+      "id": "get_visibility_overview",
+      "name": "Visibility overview",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        550,
+        0
+      ],
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://www.shareof.ai/mcp",
+        "authentication": "mcpOAuth2Api",
+        "tool": {
+          "mode": "id",
+          "value": "get_visibility_overview"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ JSON.stringify({ project_id: $json.structuredContent.projects[0].id, days: 30 }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "compare_competitors",
+      "name": "Competitor comparison",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        550,
+        220
+      ],
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://www.shareof.ai/mcp",
+        "authentication": "mcpOAuth2Api",
+        "tool": {
+          "mode": "id",
+          "value": "compare_competitors"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ JSON.stringify({ project_id: $json.structuredContent.projects[0].id, days: 30 }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "get_recommended_actions",
+      "name": "Recommended actions",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        550,
+        440
+      ],
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://www.shareof.ai/mcp",
+        "authentication": "mcpOAuth2Api",
+        "tool": {
+          "mode": "id",
+          "value": "get_recommended_actions"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ JSON.stringify({ project_id: $json.structuredContent.projects[0].id, limit: 10 }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Run review": {
+      "main": [
+        [
+          {
+            "node": "List ShareofAI projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List ShareofAI projects": {
+      "main": [
+        [
+          {
+            "node": "Visibility overview",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Competitor comparison",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Recommended actions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}
