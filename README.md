@@ -4,7 +4,7 @@ Read observed AI-answer visibility, competitor comparisons, citations, buyer-pro
 
 | Integration | What is included | Publication status |
 | --- | --- | --- |
-| n8n | Six-operation OAuth2 community node; built-in MCP Client starter workflow | Built and tested; npm release and creator submission pending publisher access |
+| n8n | Six-operation OAuth2 community node; built-in MCP Client starter workflow | Workflow submitted and under review on 3 November 2026; community node awaits npm release |
 | EmDash CMS | Sandboxed local content-readiness page and saved-entry panel | Built and tested; registry publication pending publisher sign-in |
 | RapidAPI | Validated OpenAPI description of the existing JSON-RPC MCP endpoint | Import assets prepared; publisher sign-in, gateway auth test, and listing submission pending |
 
