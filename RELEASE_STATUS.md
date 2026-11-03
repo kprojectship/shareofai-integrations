@@ -14,9 +14,9 @@ Updated 3 November 2026 (Asia/Kuala_Lumpur).
 
 ### n8n
 
-Publish n8n-nodes-shareofai to npm from this public GitHub repository with provenance, then submit its npm URL through the n8n creator portal. Configure an owner-controlled npm trusted publisher for kprojectship/shareofai-integrations, workflow publish-n8n.yml. The workflow is manual and has not been dispatched. The npm package name was available when checked; it is not reserved until successfully published. Submit the built-in MCP Client template separately if desired.
+Publish n8n-nodes-shareofai to npm from this public GitHub repository with provenance, then submit its npm URL through the n8n creator portal. Configure an owner-controlled npm trusted publisher for kprojectship/shareofai-integrations, workflow publish-n8n.yml. The workflow is manual and has not been dispatched. The npm package name was available when checked; it is not reserved until successfully published. The built-in MCP Client workflow template has been submitted separately.
 
-The creator portal currently requires email/username and password. No signed-in publisher session was available.
+The signed-in creator dashboard confirms **Review AI visibility, competitors, and actions with ShareofAI MCP** is **Under review**, dated 3 November 2026. This is the free workflow-template submission, separate from community-node verification. No public template URL is available yet.
 
 ### EmDash
 
